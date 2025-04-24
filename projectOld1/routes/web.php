@@ -46,6 +46,18 @@ Route::get('/auth/{email?}', function ($email=NULL){
     return "The auth verified email is : ". $email;
 })->where('email','[a-zA-Z0-9]+');
 
+Route::get('/department/{dId?}/{dName?}', function($dId=NULL, $dName=NULL){
+    if($dId==NULL && $dName==NULL)
+    {
+        return ("There is no current meeting in any department<br>");
+    }
+    else
+    {
+        return "There is meeting going on is department ".$dName." with meeting Id as ". $dId;
+    }
+})->where(['dId'=>'[0-9]+','dName'=>'[a-zA-Z]+']);
+
+
 // to skip the regular expression , laravel provides helper methods to solve these issues
 
 Route::get('/roll/{roll?}/{name?}', function($roll=NULL, $name=NULL){
