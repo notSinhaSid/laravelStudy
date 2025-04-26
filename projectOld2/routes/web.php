@@ -36,6 +36,12 @@ Route::get('/products/productList', function(){
 
 //sending parameter with the url to the view page in the blade template
 
+// Route::get('/customer', function(){
+//     return view('customer/details', ['Id'=>12]);
+// });
+
+//passing data without using array
+//biggest downside of this method is that only one data can be passed 
 Route::get('/customer', function(){
-    return view('customer/details', ['Id'=>12]);
+    return view('customer/details')->with('Id',45);
 });

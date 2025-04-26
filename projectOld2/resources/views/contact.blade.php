@@ -10,7 +10,7 @@
     <div class="container">
         <div class="row">
             <div class="col">
-                <h1>This is contact us page</h1>
+                <h1>This is contact us page </h1>
             </div>
         </div>
     </div>
