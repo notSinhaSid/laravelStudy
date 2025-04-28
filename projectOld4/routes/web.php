@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AboutController;
 use App\Http\Controllers\ViewReturnController;
 use App\Http\Controllers\ControllerBasedParameter;
+use App\Http\Controllers\showDetails;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,6 +34,10 @@ Route::get('/aboutus', [ViewReturnController::class, 'show']);
 
 // returning with paramters
 Route::get('/aboutthem/{name}', [ViewReturnController::class, 'withParameter']);
+
 // routes not passing any paramters
 
 Route::get('/aboutthere',[ControllerBasedParameter::class, 'returnSomeValue']);
+
+// single action invokable controller
+Route::get('/single', showDetails::class);
