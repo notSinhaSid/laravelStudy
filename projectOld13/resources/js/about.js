@@ -1,0 +1,1 @@
+alert('This is js file included in file');
