@@ -20,13 +20,13 @@ const Registration = () => {
       email: data.get('email'),
       password: data.get('password'),
       password_confirmation: data.get('password_confirmation'),
-      tc: data.get('tc'),
+      TandC: data.get('TandC'),
     }
-    if (actualData.name && actualData.email && actualData.password && actualData.password_confirmation && actualData.tc !== null) {
+    if (actualData.name && actualData.email && actualData.password && actualData.password_confirmation && actualData.TandC !== null) {
       if (actualData.password === actualData.password_confirmation) {
 
         const res = await registerUser(actualData)
-        console.log(res)
+        console.log(res) 
         if (res.data.status === "success") {
           // Store Token Code here
           storeToken(res.data.token)
@@ -48,7 +48,7 @@ const Registration = () => {
       <TextField margin='normal' required fullWidth id='email' name='email' label='Email Address' />
       <TextField margin='normal' required fullWidth id='password' name='password' label='Password' type='password' />
       <TextField margin='normal' required fullWidth id='password_confirmation' name='password_confirmation' label='Confirm Password' type='password' />
-      <FormControlLabel control={<Checkbox value={true} color="primary" name="tc" id="tc" />} label="I agree to term and condition." />
+      <FormControlLabel control={<Checkbox value={true} color="primary" name="TandC" id="TandC" />} label="I agree to term and condition." />
       <Box textAlign='center'>
         <Button type='submit' variant='contained' sx={{ mt: 3, mb: 2, px: 5 }}>Join</Button>
       </Box>

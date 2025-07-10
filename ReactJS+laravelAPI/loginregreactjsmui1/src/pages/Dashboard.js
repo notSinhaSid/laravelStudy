@@ -17,8 +17,17 @@ const Dashboard = () => {
   const navigate = useNavigate()
   const token = getToken()
   const [logoutUser] = useLogoutUserMutation()
-  const { data, isSuccess } = useGetLoggedUserQuery(token)
-  console.log(data)
+  
+  // Add isLoading and error handling
+  const { data, isSuccess, isLoading, isError, error } = useGetLoggedUserQuery(token)
+  
+  // Enhanced logging 
+  /*console.log('Token:', token)
+  console.log('API Response:', data)
+  console.log('Is Success:', isSuccess)
+  console.log('Is Loading:', isLoading)
+  console.log('Is Error:', isError)
+  console.log('Error:', error)*/
 
   const handleLogout = async () => {
     const res = await logoutUser({ token })
@@ -30,13 +39,18 @@ const Dashboard = () => {
     }
   }
 
-  // Store User Data in Local State
+  // Store User Data in Local State - with better checking
   useEffect(() => {
     if (data && isSuccess) {
-      setUserData({
-        email: data.user.email,
-        name: data.user.name,
-      })
+      /*console.log('Setting user data:', data)*/
+      // Check different possible data structures
+      const user = data.user || data.users || data.data || data
+      if (user && user.email && user.name) {
+        setUserData({
+          email: user.email,
+          name: user.name,
+        })
+      }
     }
   }, [data, isSuccess])
 
@@ -44,21 +58,56 @@ const Dashboard = () => {
   const dispatch = useDispatch()
   useEffect(() => {
     if (data && isSuccess) {
-      dispatch(setUserInfo({
-        email: data.user.email,
-        name: data.user.name,
-      }))
+      const user = data.user || data.users || data.data || data
+      if (user && user.email && user.name) {
+        dispatch(setUserInfo({
+          email: user.email,
+          name: user.name,
+        }))
+      }
     }
   }, [data, isSuccess, dispatch])
 
+  // loading state handling
+  if (isLoading) {
+    return (
+      <CssBaseline>
+        <Grid container>
+          <Grid item sm={4} sx={{ backgroundColor: 'gray', p: 5, color: 'white' }}>
+            <h1>Dashboard</h1>
+            <Typography variant='h5'>Loading...</Typography>
+          </Grid>
+        </Grid>
+      </CssBaseline>
+    )
+  }
+
+  // error state handling
+  if (isError) {
+    return (
+      <CssBaseline>
+        <Grid container>
+          <Grid item sm={4} sx={{ backgroundColor: 'gray', p: 5, color: 'white' }}>
+            <h1>Dashboard</h1>
+            <Typography variant='h5' color="error">
+              Error loading user data: {error?.message || 'Unknown error'}
+            </Typography>
+            <Button variant='contained' color='warning' size='large' onClick={handleLogout} sx={{ mt: 8 }}>
+              Logout
+            </Button>
+          </Grid>
+        </Grid>
+      </CssBaseline>
+    )
+  }
 
   return <>
     <CssBaseline />
     <Grid container>
       <Grid item sm={4} sx={{ backgroundColor: 'gray', p: 5, color: 'white' }}>
         <h1>Dashboard</h1>
-        <Typography variant='h5'>Email: {userData.email}</Typography>
-        <Typography variant='h6'>Name: {userData.name}</Typography>
+        <Typography variant='h5'>Email: {userData.email || 'Loading...'}</Typography>
+        <Typography variant='h6'>Name: {userData.name || 'Loading...'}</Typography>
         <Button variant='contained' color='warning' size='large' onClick={handleLogout} sx={{ mt: 8 }}>Logout</Button>
       </Grid>
       <Grid item sm={8}>
